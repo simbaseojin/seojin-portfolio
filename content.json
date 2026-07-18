@@ -379,8 +379,15 @@
             { "no": "03", "title": "Execution", "body": "가격 인하와 상품 등록, 거래 전환율을 핵심 지표로 관리하고, UP하기 가격 내리기, 오늘특가, 조건부 할인 쿠폰을 연속 출시했습니다. 전환 이후 모니터링과 오탐 개선도 지속했습니다." },
             { "no": "04", "title": "Outcome", "body": "전환 4개월 만에 월 거래액이 461억 원에서 765억 원으로 66% 성장했고 2024년 12월 796억 원을 기록했습니다. 사기 거래는 일평균 54건에서 5건으로 90.7% 감소했습니다." }
           ],
-          "note": "공개용 상세 사례는 프로젝트별 수치와 개인 기여 범위를 최종 검증한 뒤 확장할 수 있습니다.",
-          "gallery": []
+          "note": "아래 자료의 내부 지표(거래액, 목표, 수수료 등)는 블러 처리했습니다. 대고객 공개 소개는 exhibition.bunjang.co.kr/securepayment 에서 확인할 수 있습니다.",
+          "gallery": [
+            { "src": "assets/case-safepay/01-transition-need.png", "caption": "왜 100% 안전결제 전환이 필요한가 — 중고거래 포지셔닝" },
+            { "src": "assets/case-safepay/02-chat-analysis.png", "caption": "번개톡 사용 유형 분석 — 톡 없는 거래 방향성의 근거" },
+            { "src": "assets/case-safepay/03-feature-map.png", "caption": "100% 안전결제 기능 맵 — 구매자, 판매자 여정별 설계" },
+            { "src": "assets/case-safepay/04-okr.png", "caption": "2025 안전결제 사일로 OKR 구조 (내부 지표 블러)" },
+            { "src": "assets/case-safepay/05-gmv-trend.png", "caption": "안전결제 전환 전후 거래액 추이와 전환 시점 (수치 블러)" },
+            { "src": "assets/case-safepay/06-completion-rate.png", "caption": "14일 판매완료율 추이와 주요 기능 마일스톤 (수치 블러)" }
+          ]
         }
       },
       {
