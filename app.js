@@ -79,34 +79,39 @@ function renderHero() {
 }
 
 /* ---------------- CAREER SYSTEM ---------------- */
-function projectCard(p) {
+function projectRow(p) {
   const list = (arr) => arr.map((x) => `<li>${esc(x)}</li>`).join("");
   const did = p.whatIDid && p.whatIDid.length
-    ? `<div class="pcard__block"><h4>WHAT I DID</h4><ul>${list(p.whatIDid)}</ul></div>` : "";
+    ? `<div class="prow__block"><h5>WHAT I DID</h5><ul>${list(p.whatIDid)}</ul></div>` : "<div></div>";
   const out = p.outcome && p.outcome.length
-    ? `<div class="pcard__block outcome"><h4>OUTCOME</h4><ul>${list(p.outcome)}</ul></div>` : "";
+    ? `<div class="prow__block outcome"><h5>OUTCOME</h5><ul>${list(p.outcome)}</ul></div>` : "<div></div>";
   const tags = (p.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
-  return `<article class="pcard reveal">
-    <div class="pcard__mono">${esc(mono(p.company))}</div>
-    <div class="pcard__date mono">${esc(p.date)}</div>
-    <div class="pcard__company">${esc(p.company)}</div>
-    <div class="pcard__role">${esc(p.role)}</div>
-    <h3 class="pcard__title">${esc(p.title)}</h3>
-    <p class="pcard__desc">${esc(p.desc)}</p>
-    ${did}${out}
-    <div class="pcard__tags">${tags}</div>
+  return `<article class="prow reveal">
+    <div class="prow__meta">
+      <span class="prow__date">${esc(p.date)}</span>
+      <span class="prow__company">${esc(p.company)}</span>
+    </div>
+    <div class="prow__body">
+      <div class="prow__role">${esc(p.role)}</div>
+      <h4 class="prow__title">${esc(p.title)}</h4>
+      <p class="prow__desc">${esc(p.desc)}</p>
+      <hr class="prow__div">
+      <div class="prow__grid">
+        ${did}${out}
+        <a class="prow__detail" href="#projects">프로젝트 상세 <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="prow__tags">${tags}</div>
+    </div>
   </article>`;
 }
 
 function renderCareer() {
   const c = DATA.careerSystem;
-  el("career-head").innerHTML = `
-    <div class="section__label eyebrow">${esc(c.sectionNo)} / ${esc(c.sectionLabel)}</div>
-    <h2 class="section__title">${c.title.map((t) => `<span>${esc(t)}</span>`).join("")}</h2>
-    <p class="section__desc">${esc(c.desc)}</p>`;
-
   const vCap = c.views.capability, vCo = c.views.company;
-  el("career-ctl").innerHTML = `
+  el("career-aside").innerHTML = `
+    <div class="section__label eyebrow">${esc(c.sectionNo)} / ${esc(c.sectionLabel)}</div>
+    <h2 class="career-aside__title">${c.title.map((t) => `<span>${esc(t)}</span>`).join("")}</h2>
+    <p class="career-aside__desc">${esc(c.desc)}</p>
     <div class="viewctl">
       <div class="viewctl__bar"><small>VIEW CONTROL</small><small id="viewMode">${esc(vCap.mode)}</small></div>
       <div class="viewctl__tabs">
@@ -114,8 +119,7 @@ function renderCareer() {
         <button class="viewctl__tab" data-view="company"><span class="check">✓</span> ${esc(vCo.label)}</button>
       </div>
     </div>
-    <div class="viewctl__note" id="viewNote">${esc(vCap.note)}</div>
-    <div class="groupmeta" id="groupMeta"><small id="groupSub">${esc(vCap.sub)}</small><p id="groupSubDesc">${esc(vCap.subDesc)}</p></div>`;
+    <div class="viewctl__note" id="viewNote">${esc(vCap.note)}</div>`;
 
   document.querySelectorAll(".viewctl__tab").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -132,8 +136,6 @@ function renderClusters(view) {
   const v = c.views[view];
   el("viewMode").textContent = v.mode;
   el("viewNote").textContent = v.note;
-  el("groupSub").textContent = v.sub;
-  el("groupSubDesc").textContent = v.subDesc;
 
   let clusters;
   if (view === "capability") {
@@ -151,12 +153,13 @@ function renderClusters(view) {
 
   el("career-clusters").innerHTML = clusters.map((g) => `
     <div class="cluster">
+      <span class="cluster__dot"></span>
       <div class="cluster__head">
         <span class="cluster__no">${esc(g.no)}</span>
         <div class="cluster__info"><h3>${esc(g.title)}</h3><p>${esc(g.desc)}</p></div>
         <span class="cluster__count">${g.projects.length} PROJECTS</span>
       </div>
-      <div class="cards">${g.projects.map(projectCard).join("")}</div>
+      <div class="rows">${g.projects.map(projectRow).join("")}</div>
     </div>`).join("");
   wireReveal();
 }
