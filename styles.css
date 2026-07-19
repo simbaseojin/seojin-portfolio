@@ -169,7 +169,7 @@ ul { list-style: none; }
 .prow__block li::before { content: ""; position: absolute; left: 0; top: 8px; width: 5px; height: 5px; border-radius: 50%; background: var(--ink-45); }
 .prow__block.outcome li { color: var(--navy); font-weight: 500; }
 .prow__block.outcome li::before { background: var(--coral); }
-.prow__detail { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--navy); white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; border-bottom: 1px solid var(--navy); padding-bottom: 3px; height: fit-content; }
+.prow__detail { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: .06em; color: var(--navy); white-space: nowrap; display: inline-flex; gap: 6px; align-items: center; background: none; border: 0; border-bottom: 1px solid var(--navy); padding: 0 0 3px; cursor: pointer; height: fit-content; }
 .prow__detail:hover { color: var(--coral); border-color: var(--coral); }
 .prow__tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 22px; }
 .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .03em; color: var(--ink-60); border: 1px solid var(--line-light); border-radius: 20px; padding: 5px 12px; background: rgba(11,24,39,.03); }

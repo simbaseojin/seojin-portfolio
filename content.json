@@ -69,7 +69,8 @@
               "전환 4개월 만에 월 거래액 461억 원에서 765억 원으로 66% 성장, 2024년 12월 796억 원 기록",
               "사기 거래 일평균 54건에서 5건으로 90.7% 감소"
             ],
-            "tags": ["Business Model", "Escrow", "Change Leadership"]
+            "tags": ["Business Model", "Escrow", "Change Leadership"],
+            "caseRef": 0
           },
           {
             "date": "2023 — 2024.11",
@@ -86,7 +87,8 @@
               "톡 없는 결제 완료 비중 33%에서 43%, 이후 60%까지 확대, 거래액은 전년 대비 85% 성장",
               "장바구니 출시 후 객단가 9.6만 원대에서 약 10만 원으로 3.4% 상승, 일 2만 건과 6.5억 원 거래 발생"
             ],
-            "tags": ["C2C", "Checkout", "Commerce Foundation"]
+            "tags": ["C2C", "Checkout", "Commerce Foundation"],
+            "caseRef": 1
           },
           {
             "date": "2022.05 — 2022.09",
@@ -126,7 +128,8 @@
               "홈 추천 상품 클릭 유저 비율 약 7%p에서 8%p 상승",
               "홈 방문자의 상품 상세 진입 비율 28%에서 34%로 6%p 상승, 인당 상세 조회와 유저당 판매 완료 동반 증가"
             ],
-            "tags": ["Recommendation", "A/B Test", "Discovery"]
+            "tags": ["Recommendation", "A/B Test", "Discovery"],
+            "caseRef": 3
           },
           {
             "date": "2023.02 — 2023.10",
@@ -142,7 +145,8 @@
               "관심탭 방문율 63% 달성, 인당 상품 상세 탐색 7건에서 9.7건으로 증가",
               "하루 19만에서 20만 PV의 순수 탐색량 증분 확보"
             ],
-            "tags": ["Subscription", "Feed", "Discovery"]
+            "tags": ["Subscription", "Feed", "Discovery"],
+            "caseRef": 2
           },
           {
             "date": "2023",

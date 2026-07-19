@@ -98,7 +98,7 @@ function projectRow(p) {
       <hr class="prow__div">
       <div class="prow__grid">
         ${did}${out}
-        <a class="prow__detail" href="#projects">프로젝트 상세 <span aria-hidden="true">↗</span></a>
+        ${p.caseRef != null ? `<button class="prow__detail" data-case="${p.caseRef}">프로젝트 상세 <span aria-hidden="true">↗</span></button>` : ""}
       </div>
       <div class="prow__tags">${tags}</div>
     </div>
@@ -161,6 +161,8 @@ function renderClusters(view) {
       </div>
       <div class="rows">${g.projects.map(projectRow).join("")}</div>
     </div>`).join("");
+  document.querySelectorAll(".prow__detail").forEach((b) =>
+    b.addEventListener("click", () => openCase(+b.dataset.case)));
   wireReveal();
 }
 
