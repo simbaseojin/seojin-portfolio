@@ -324,7 +324,8 @@
             "outcome": [
               "전체 매출에서 사이렌 오더 주문 비중을 20%대에서 35% 수준으로 확대"
             ],
-            "tags": ["O2O", "Product Strategy", "Partnership"]
+            "tags": ["O2O", "Product Strategy", "Partnership"],
+            "caseRef": 4
           },
           {
             "date": "2021.07 — 2022.03",
@@ -339,7 +340,8 @@
             "outcome": [
               "모바일 상품권을 배송과 커머스 사업으로 확장해 이익률 개선의 기반 마련"
             ],
-            "tags": ["Gift Commerce", "In-app Commerce", "Service Expansion"]
+            "tags": ["Gift Commerce", "In-app Commerce", "Service Expansion"],
+            "caseRef": 4
           },
           {
             "date": "2019 — 2022",
@@ -363,7 +365,7 @@
   "selectedProjects": {
     "sectionNo": "02",
     "sectionLabel": "SELECTED PROJECTS",
-    "title": ["변화를 만든", "네 개의 선택"],
+    "title": ["변화를 만든", "결정적 선택들"],
     "desc": "프로젝트의 규모보다 어떤 문제를 정의했고, 어떤 결정을 내렸으며, 무엇을 바꾸었는지를 중심으로 구성했습니다.",
     "cases": [
       {
@@ -454,6 +456,27 @@
             { "no": "04", "title": "Outcome", "body": "홈 추천 상품 클릭 유저 비율이 약 7%p에서 8%p 상승했고, 홈 방문자의 상품 상세 진입 비율은 28%에서 34%로 6%p 증가했습니다. 인당 상세 조회와 유저당 판매 완료도 함께 개선됐습니다." }
           ],
           "note": "공개용 상세 사례는 프로젝트별 수치와 개인 기여 범위를 최종 검증한 뒤 확장할 수 있습니다.",
+          "gallery": []
+        }
+      },
+      {
+        "no": "05",
+        "category": "DIGITAL PLATFORM STRATEGY",
+        "badge": "STARBUCKS KOREA / CAREER CASE",
+        "flow": "PROBLEM → DECISION → OUTCOME",
+        "title": "사이렌 오더 고도화와 인앱 커머스 구축",
+        "desc": "매장 픽업 중심의 사이렌 오더와 매장용 모바일 상품권을, 디지털 플랫폼 전략 아래 주문 고도화와 e커머스 사업으로 확장했습니다.",
+        "period": "2019 — 2022",
+        "role": "Strategy Lead",
+        "result": "사이렌오더 주문 비중 35%",
+        "detail": {
+          "sections": [
+            { "no": "01", "title": "Background", "body": "사이렌 오더가 매장 픽업 주문에 집중돼 있었고 모바일 상품권은 매장 사용에 국한되어, 전사 성장 목표를 달성하려면 디지털 플랫폼의 트래픽과 커머스 사업 기반을 함께 키워야 했습니다." },
+            { "no": "02", "title": "My role", "body": "사이렌 오더의 중장기 정량 목표를 전사 목표에 연동해 설정하고, 사이렌 오더 고도화와 Gift 배송, e커머스 풀프레임 구축을 하나의 디지털 플랫폼 전략과 로드맵으로 설계하고 운영했습니다." },
+            { "no": "03", "title": "Execution", "body": "사이렌 오더에 MD 주문 확대, 피크 시간 대기 알림과 근처 대체 매장 선택, 상황별 마케팅 메시지를 도입했습니다. 2021년 7월 Gift 배송하기를 런칭한 뒤 상품 등록부터 결제, 배송, 정산까지 커머스 풀프레임을 단계적으로 구축하고, e기프트 쿠폰 등 결제 수단을 확대했습니다." },
+            { "no": "04", "title": "Outcome", "body": "사이렌 오더 주문 비중을 20%대에서 35% 수준으로 확대했고, 매장용 모바일 상품권을 배송과 기프트샵 기반의 인앱 커머스 사업으로 확장해 이익률 개선의 기반을 마련했습니다." }
+          ],
+          "note": "관련 기획 자료는 사내 대외비로, 공개 시 민감 수치를 블러 처리해 추가합니다.",
           "gallery": []
         }
       }
