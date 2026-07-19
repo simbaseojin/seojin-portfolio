@@ -122,14 +122,14 @@ ul { list-style: none; }
 /* =========================================================================
    CAREER SYSTEM (split: dark sticky aside + full-width row list)
    ========================================================================= */
-.career { position: relative; padding: 0; background: linear-gradient(to right, var(--navy) 0 34%, var(--paper) 34% 100%); }
-.career-grid { display: grid; grid-template-columns: 34% 1fr; align-items: start; }
+.career { position: relative; padding: 0; background: linear-gradient(to right, var(--navy) 0 27%, var(--paper) 27% 100%); }
+.career-grid { display: grid; grid-template-columns: 27% 1fr; align-items: start; }
 
-.career-aside { position: sticky; top: 76px; align-self: start; padding: clamp(60px,8vw,110px) clamp(28px,3vw,52px) 60px var(--pad); color: #fff; }
+.career-aside { position: sticky; top: 76px; align-self: start; padding: clamp(60px,8vw,110px) clamp(22px,1.8vw,32px) 60px var(--pad); color: #fff; }
 .career-aside .section__label { color: var(--coral); margin-bottom: 22px; }
-.career-aside__title { font-size: clamp(30px,3.4vw,50px); font-weight: 730; line-height: 1.08; letter-spacing: -0.02em; color: #fff; }
+.career-aside__title { font-size: clamp(28px,2.8vw,44px); font-weight: 730; line-height: 1.1; letter-spacing: -0.02em; color: #fff; }
 .career-aside__title span { display: block; }
-.career-aside__desc { margin-top: 22px; font-size: 15px; line-height: 1.7; color: var(--white-72); max-width: 330px; }
+.career-aside__desc { margin-top: 22px; font-size: 15px; line-height: 1.7; color: var(--white-72); max-width: 300px; }
 
 .viewctl { border: 1px solid var(--line-dark); border-radius: 12px; overflow: hidden; margin-top: 40px; }
 .viewctl__bar { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line-dark); }
