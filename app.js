@@ -212,9 +212,11 @@ function openCase(i) {
       <div class="modal__left">
         <div class="modal__left-grid"></div>
         <div class="modal__diamond">
-          <svg viewBox="0 0 300 300" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2">
-            <path d="M30 90 L150 150 L30 210"/><path d="M30 150 L150 150"/>
-            <rect x="120" y="120" width="60" height="60" transform="rotate(45 150 150)" fill="#E4513B" stroke="#fff" stroke-width="4"/>
+          <svg viewBox="0 0 420 300" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2">
+            <path d="M55 150 L330 58"/>
+            <path d="M55 150 L360 150"/>
+            <path d="M55 150 L330 242"/>
+            <rect x="333" y="123" width="54" height="54" transform="rotate(45 360 150)" fill="#E4513B" stroke="#fff" stroke-width="4"/>
           </svg>
         </div>
         <div class="modal__cat">${esc(cs.no)} / ${esc(cs.category)}</div>

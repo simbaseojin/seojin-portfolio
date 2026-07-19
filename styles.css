@@ -205,8 +205,8 @@ ul { list-style: none; }
 @keyframes slideup { from { transform: translateY(30px); opacity: 0; } }
 .modal__left { position: relative; background: var(--navy); overflow: hidden; display: flex; align-items: flex-end; padding: 50px; }
 .modal__left-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--line-dark) 1px, transparent 1px), linear-gradient(90deg, var(--line-dark) 1px, transparent 1px); background-size: 50px 50px; }
-.modal__diamond { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-.modal__diamond svg { width: min(60%, 380px); height: auto; }
+.modal__diamond { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 100%; display: flex; justify-content: center; }
+.modal__diamond svg { width: min(84%, 560px); height: auto; }
 .modal__cat { position: relative; font-family: var(--mono); font-size: 12px; letter-spacing: .16em; color: var(--white-56); }
 .modal__right { background: var(--card); overflow-y: auto; padding: clamp(40px, 5vw, 84px); }
 .modal__close { position: absolute; top: 26px; left: 26px; z-index: 3; width: 52px; height: 52px; border: 1px solid var(--line-dark); background: rgba(0,0,0,.2); border-radius: 8px; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .2s; }
