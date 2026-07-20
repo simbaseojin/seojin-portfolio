@@ -388,7 +388,6 @@
           "note": "아래 자료의 내부 지표(거래액, 목표, 수수료 등)는 블러 처리했습니다. 대고객 공개 소개는 exhibition.bunjang.co.kr/securepayment 에서 확인할 수 있습니다.",
           "gallery": [
             { "src": "assets/case-safepay/01-transition-need.png", "caption": "왜 100% 안전결제 전환이 필요한가 — 중고거래 포지셔닝" },
-            { "src": "assets/case-safepay/02-chat-analysis.png", "caption": "번개톡 사용 유형 분석 — 톡 없는 거래 방향성의 근거" },
             { "src": "assets/case-safepay/03-feature-map.png", "caption": "100% 안전결제 기능 맵 — 구매자, 판매자 여정별 설계" },
             { "src": "assets/case-safepay/04-okr.png", "caption": "2025 안전결제 사일로 OKR 구조 (내부 지표 블러)" },
             { "src": "assets/case-safepay/05-gmv-trend.png", "caption": "안전결제 전환 전후 거래액 추이와 전환 시점 (수치 블러)" },
@@ -413,8 +412,14 @@
             { "no": "03", "title": "Execution", "body": "가격 제안, 상품 등록과 상세 개편, 다중 배송비, 장바구니와 합배송, 번개톡 브릿지를 단계적으로 출시했습니다. 구매 전 필요한 정보를 구조화해 대화 없이 결제 가능한 조건을 만들었습니다." },
             { "no": "04", "title": "Outcome", "body": "톡 없는 결제 완료 비중을 33%에서 43%, 이후 60%까지 확대했고 거래액은 전년 대비 85% 성장했습니다. 장바구니 출시 후 객단가는 3.4% 상승했고 일 2만 건과 6.5억 원 거래가 발생했습니다." }
           ],
-          "note": "공개용 상세 사례는 프로젝트별 수치와 개인 기여 범위를 최종 검증한 뒤 확장할 수 있습니다.",
-          "gallery": []
+          "note": "아래 자료의 내부 수치와 개인정보는 블러 처리했습니다.",
+          "gallery": [
+            { "src": "assets/case-notalk/02-chat-analysis.png", "caption": "번개톡 사용 유형 분석 — 톡 의존 거래의 문제 정의 (수치 블러)" },
+            { "src": "assets/case-notalk/01-concept.png", "caption": "스트레스 없는 중고거래 방향 — 톡 프리, 상품정보 획득, 결제 정비" },
+            { "src": "assets/case-notalk/03-price-offer.png", "caption": "가격 제안 기능 — 대화 없이 가격 협상 (개인정보 블러)" },
+            { "src": "assets/case-notalk/04-product-reg.png", "caption": "거래에 필요한 정보 등록 편의 — 문구, 상태값, 속성 규격화" },
+            { "src": "assets/case-notalk/05-product-detail.png", "caption": "상품 정보를 한눈에 — 상세 정보와 상점 신뢰 정보 제공" }
+          ]
         }
       },
       {
