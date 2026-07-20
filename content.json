@@ -476,8 +476,14 @@
             { "no": "03", "title": "Execution", "body": "사이렌 오더에 MD 주문 확대, 피크 시간 대기 알림과 근처 대체 매장 선택, 상황별 마케팅 메시지를 도입했습니다. 2021년 7월 Gift 배송하기를 런칭한 뒤 상품 등록부터 결제, 배송, 정산까지 커머스 풀프레임을 단계적으로 구축하고, e기프트 쿠폰 등 결제 수단을 확대했습니다." },
             { "no": "04", "title": "Outcome", "body": "사이렌 오더 주문 비중을 20%대에서 35% 수준으로 확대했고, 매장용 모바일 상품권을 배송과 기프트샵 기반의 인앱 커머스 사업으로 확장해 이익률 개선의 기반을 마련했습니다." }
           ],
-          "note": "관련 기획 자료는 사내 대외비로, 공개 시 민감 수치를 블러 처리해 추가합니다.",
-          "gallery": []
+          "note": "아래 자료의 내부 지표(매출, 목표, 구성비, MAU 등)는 블러 처리했습니다.",
+          "gallery": [
+            { "src": "assets/case-starbucks/01-midterm-goal.png", "caption": "플랫폼 중장기 정량 목표 — 전사 목표에 연동한 사이렌오더 목표 설정 (내부 수치 블러)" },
+            { "src": "assets/case-starbucks/02-completeness.png", "caption": "디지털 프로덕트 완성도 강화 방향 — 사이렌오더, e커머스, 결제 (내부 수치 블러)" },
+            { "src": "assets/case-starbucks/03-experience.png", "caption": "사이렌오더 경험 고도화 — MD 주문 확대, 대기 알림, 상황별 마케팅 메시지" },
+            { "src": "assets/case-starbucks/04-commerce-frame.png", "caption": "커머스 Full Frame System 및 단계별 추진 로드맵" },
+            { "src": "assets/case-starbucks/05-platform-tobe.png", "caption": "디지털 플랫폼 서비스 구성 (To-be) 아키텍처" }
+          ]
         }
       }
     ]
