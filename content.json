@@ -412,9 +412,9 @@
             { "no": "03", "title": "Execution", "body": "가격 제안, 상품 등록과 상세 개편, 다중 배송비, 장바구니와 합배송, 번개톡 브릿지를 단계적으로 출시했습니다. 구매 전 필요한 정보를 구조화해 대화 없이 결제 가능한 조건을 만들었습니다." },
             { "no": "04", "title": "Outcome", "body": "톡 없는 결제 완료 비중을 33%에서 43%, 이후 60%까지 확대했고 거래액은 전년 대비 85% 성장했습니다. 장바구니 출시 후 객단가는 3.4% 상승했고 일 2만 건과 6.5억 원 거래가 발생했습니다." }
           ],
-          "note": "아래 자료의 내부 수치와 개인정보는 블러 처리했습니다.",
+          "note": "아래 자료 중 개인정보(이름, 주소, 연락처)는 블러 처리했습니다.",
           "gallery": [
-            { "src": "assets/case-notalk/02-chat-analysis.png", "caption": "번개톡 사용 유형 분석 — 톡 의존 거래의 문제 정의 (수치 블러)" },
+            { "src": "assets/case-notalk/02-chat-analysis.png", "caption": "번개톡 사용 유형 분석 — 톡 의존 거래의 문제 정의" },
             { "src": "assets/case-notalk/01-concept.png", "caption": "스트레스 없는 중고거래 방향 — 톡 프리, 상품정보 획득, 결제 정비" },
             { "src": "assets/case-notalk/03-price-offer.png", "caption": "가격 제안 기능 — 대화 없이 가격 협상 (개인정보 블러)" },
             { "src": "assets/case-notalk/04-product-reg.png", "caption": "거래에 필요한 정보 등록 편의 — 문구, 상태값, 속성 규격화" },
