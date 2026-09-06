@@ -1,344 +1,270 @@
-/* =========================================================================
-   이서진 Portfolio — Renderer
-   content.json 을 읽어 전체 페이지를 그린다. 콘텐츠 수정은 content.json 만 고치면 됨.
-   ========================================================================= */
+/* =====================================================================
+   이서진 / Product Leader renderer
+   모든 콘텐츠는 content.json 에 있습니다. 이 파일은 그리기만 합니다.
+   페이지 종류는 <body data-page="..."> 로 구분합니다.
+   ===================================================================== */
 
 const esc = (s) => String(s == null ? "" : s)
-  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const el = (id) => document.getElementById(id);
+const L = (a, f) => (a || []).map(f).join("");
+const has = (a) => Array.isArray(a) && a.length > 0;
+const linkify = (s) => esc(s).replace(
+  /((?:https?:\/\/)?[a-z0-9-]+(?:\.[a-z0-9-]+)+(?:\/[^\s]*)?)/gi,
+  (m) => `<a href="${m.startsWith("http") ? m : "https://" + m}" target="_blank" rel="noopener">${m}</a>`);
 
-// 회사 → 2글자 모노그램 (카드 워터마크용)
-const MONOGRAM = {
-  "번개장터": "BJ", "SK플래닛 / 11번가": "11", "티몬": "TM",
-  "신세계 I&C": "SH", "SK커뮤니케이션즈": "SK", "스타벅스 코리아": "ST"
-};
-const mono = (c) => MONOGRAM[c] || (c || "").slice(0, 2).toUpperCase();
-
-let DATA = null;
-
-async function boot() {
-  DATA = await fetch("content.json?v=" + Date.now()).then((r) => r.json());
-  document.title = DATA.meta.title;
-  renderNav();
-  renderHero();
-  renderCareer();
-  renderProjects();
-  renderAI();
-  renderTrajectory();
-  renderContact();
-  wireNavScroll();
-  wireReveal();
+/* 이미지 파일이 아직 없을 때: 해당 칸을 숨기고, 그룹이 통째로 비면 라벨까지 숨긴다 */
+function hideShot(img) {
+  const fig = img.closest("figure");
+  if (fig) fig.hidden = true;
+  const grid = img.closest(".b-shots");
+  if (grid && !grid.querySelector("figure:not([hidden])")) {
+    const wrap = grid.closest(".b");
+    if (wrap) wrap.hidden = true;
+  }
 }
+window.hideShot = hideShot;
 
-/* ---------------- NAV ---------------- */
-function renderNav() {
-  const n = DATA.nav.map((l) => `<a href="${esc(l.href)}">${esc(l.label)}</a>`).join("");
+const PAGE = document.body.dataset.page;
+const CASE = document.body.dataset.case;
+/* ?open=all : 전체 섹션 펼쳐 보기 (검토, 인쇄용) */
+const OPEN_ALL = new URLSearchParams(location.search).get("open") === "all";
+
+/* ------------------------------------------------------------ CHROME */
+function chrome(d) {
+  const here = location.pathname.split("/").pop() || "index.html";
   el("nav").innerHTML = `
-    <a class="nav__brand" href="#top">
-      <img class="nav__mark" src="assets/sj-mark.png" alt="">
-      <span class="nav__name"><b>${esc(DATA.brand.name)}</b><span>${esc(DATA.brand.sub)}</span></span>
-    </a>
-    <nav class="nav__links" id="navLinks">${n}</nav>
-    <a class="nav__cta" href="#contact">Contact <span aria-hidden="true">↗</span></a>
-    <button class="nav__toggle" id="navToggle" aria-label="메뉴">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    </button>`;
-  el("navToggle").addEventListener("click", () => el("navLinks").classList.toggle("open"));
-  el("navLinks").addEventListener("click", (e) => { if (e.target.tagName === "A") el("navLinks").classList.remove("open"); });
+    <div class="nav__in">
+      <a class="nav__brand" href="index.html">${esc(d.brand)}</a>
+      <nav class="nav__links">
+        ${L(d.nav, (n) => `<a href="${esc(n.href)}"${n.href === here ? ' class="on"' : ""}>${esc(n.label)}</a>`)}
+      </nav>
+    </div>`;
+  el("footer").innerHTML = `
+    <div class="footer__in">
+      <span>${esc(d.footer.copy)}</span>
+      <a href="${esc(d.footer.href)}">${esc(d.footer.cta)}</a>
+    </div>`;
 }
 
-/* ---------------- HERO ---------------- */
-function renderHero() {
-  const h = DATA.hero;
-  const title = h.headline.map((l) => `<span class="${l.accent ? "coral" : ""}">${esc(l.text)}</span>`).join("");
-  const stats = h.stats.map((s, i) => `
-    <div class="hero__stat ${i === 2 || i === 3 ? "accent" : ""}">
-      <b>${esc(s.value)}</b><span>${esc(s.label)}</span>
-    </div>`).join("");
-  const flow = h.flow.steps.map((s, i) => `
-    ${i > 0 ? '<span class="hero__flow-arrow">→</span>' : ""}
-    <div class="hero__flow-step"><small>${esc(s.stage)}</small><b>${esc(s.label)}</b></div>`).join("");
-  el("hero").innerHTML = `
-    <div class="hero__bg"><img src="assets/hero-system.webp" alt=""></div>
-    <div class="hero__grid-lines"></div>
-    <div class="hero__side">${h.eyebrow.map(esc).join("</span><span>")}</div>
-    <div class="wrap">
-      <div class="hero__main">
+/* --------------------------------------------------------------- HOME */
+function renderHome(d) {
+  const h = d.home;
+  el("main").innerHTML = `
+    <section class="hero"><div class="wrap">
+      <div class="hero__grid">
         <div>
-          <div class="hero__kicker eyebrow">${esc(h.kicker)}</div>
-          <h1 class="hero__title">${title}</h1>
-          <p class="hero__summary">${esc(h.summary)}</p>
-          <a class="hero__cta mono" href="#career">${esc(h.cta)}</a>
+          <div class="eyebrow rv">${esc(h.eyebrow)}</div>
+          <h1 class="hero__h rv">${L(h.headline, (l) => esc(l) + "<br>")}</h1>
         </div>
-        <div class="hero__stats">${stats}</div>
+        ${h.portrait ? `<img class="hero__portrait rv" src="${esc(h.portrait)}" alt="">` : ""}
       </div>
-    </div>
-    <div class="hero__flow"><div class="wrap"><div class="hero__flow-inner">
-      <span class="hero__flow-label">${esc(h.flow.label)}</span>${flow}
-    </div></div></div>`;
+      <div class="hero__meta rv">
+        <div class="hero__yrs">${esc(h.years)}</div>
+        <div class="hero__dom">${esc(h.domains)}</div>
+        <div class="hero__span">${esc(h.span)}</div>
+      </div>
+      <div class="hero__scroll rv">${esc(h.scroll)}</div>
+    </div></section>
+
+    <section class="sec"><div class="wrap">
+      <div class="sec__label rv">${esc(h.journey.label)}</div>
+      <h2 class="sec__title rv">${L(h.journey.title, (t) => esc(t) + "<br>")}</h2>
+      <div class="jr">
+        ${L(h.journey.items, (it) => `
+          <div class="jr__row rv">
+            <div class="jr__no">${esc(it.no)}</div>
+            <div>
+              <div class="jr__t">${esc(it.t)}</div>
+              <div class="jr__d">${esc(it.d)}</div>
+              <ul class="jr__p">${L(it.p, (x) => `<li>${esc(x)}</li>`)}</ul>
+            </div>
+          </div>`)}
+      </div>
+    </div></section>
+
+    <section class="sec sec--tint"><div class="wrap">
+      <div class="sec__label rv">${esc(h.principles.label)}</div>
+      <div class="pr">
+        ${L(h.principles.items, (p) => `
+          <div class="rv"><div class="pr__no">${esc(p.no)}</div>
+          <div class="pr__t">${L(p.t, (l) => esc(l) + "<br>")}</div></div>`)}
+      </div>
+    </div></section>`;
 }
 
-/* ---------------- CAREER SYSTEM ---------------- */
-function projectRow(p) {
-  const list = (arr) => arr.map((x) => `<li>${esc(x)}</li>`).join("");
-  const did = p.whatIDid && p.whatIDid.length
-    ? `<div class="prow__block"><h5>WHAT I DID</h5><ul>${list(p.whatIDid)}</ul></div>` : "<div></div>";
-  const out = p.outcome && p.outcome.length
-    ? `<div class="prow__block outcome"><h5>OUTCOME</h5><ul>${list(p.outcome)}</ul></div>` : "<div></div>";
-  const tags = (p.tags || []).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
-  return `<article class="prow reveal">
-    <div class="prow__meta">
-      <span class="prow__date">${esc(p.date)}</span>
-      <span class="prow__company">${esc(p.company)}</span>
-    </div>
-    <div class="prow__body">
-      <div class="prow__role">${esc(p.role)}</div>
-      <h4 class="prow__title">${esc(p.title)}</h4>
-      <p class="prow__desc">${esc(p.desc)}</p>
-      <hr class="prow__div">
-      <div class="prow__grid">
-        ${did}${out}
-        ${p.caseRef != null ? `<button class="prow__detail" data-case="${p.caseRef}">프로젝트 상세 <span aria-hidden="true">↗</span></button>` : ""}
+/* --------------------------------------------------------------- WORK */
+function renderWork(d) {
+  const w = d.work;
+  el("main").innerHTML = `
+    <div class="page"><div class="wrap">
+      <h1 class="page__t rv">${esc(w.title)}</h1>
+      <p class="page__d rv">${esc(w.desc)}</p>
+      <div class="wk">
+        ${L(w.items, (it) => `
+          <a class="wk__item rv" href="${esc(it.href)}">
+            <div>
+              <div class="wk__no">${esc(it.no)}</div>
+              <h2 class="wk__t">${L(it.title, (t) => esc(t) + "<br>")}</h2>
+              <div class="wk__m">${esc(it.meta)}</div>
+              <p class="wk__d">${esc(it.desc)}</p>
+              <span class="wk__go">View case →</span>
+            </div>
+            <div class="wk__thumb wk__thumb--${esc(it.visual || "campaign")}">${L(it.thumbs || [it.thumb], (src) => `<img src="${esc(src)}" alt="" loading="lazy">`)}</div>
+          </a>`)}
       </div>
-      <div class="prow__tags">${tags}</div>
-    </div>
-  </article>`;
+    </div></div>`;
 }
 
-function renderCareer() {
-  const c = DATA.careerSystem;
-  const vCap = c.views.capability, vCo = c.views.company;
-  el("career-aside").innerHTML = `
-    <div class="section__label eyebrow">${esc(c.sectionNo)} / ${esc(c.sectionLabel)}</div>
-    <h2 class="career-aside__title">${c.title.map((t) => `<span>${esc(t)}</span>`).join("")}</h2>
-    <p class="career-aside__desc">${esc(c.desc)}</p>
-    <div class="viewctl">
-      <div class="viewctl__bar"><small>VIEW CONTROL</small><small id="viewMode">${esc(vCap.mode)}</small></div>
-      <div class="viewctl__tabs">
-        <button class="viewctl__tab active" data-view="capability"><span class="check">✓</span> ${esc(vCap.label)}</button>
-        <button class="viewctl__tab" data-view="company"><span class="check">✓</span> ${esc(vCo.label)}</button>
-      </div>
-    </div>
-    <div class="viewctl__note" id="viewNote">${esc(vCap.note)}</div>`;
+/* -------------------------------------------------------- CASE BLOCKS */
+function block(b) {
+  switch (b.t) {
+    case "h":       return `<h3 class="b b-h">${esc(b.v)}</h3>`;
+    case "p":       return `<p class="b b-p">${esc(b.v)}</p>`;
+    case "quote":   return `<ul class="b b-quote">${L(b.items, (x) => `<li>${esc(x)}</li>`)}</ul>`;
+    case "callout": return `<p class="b b-callout">${esc(b.v)}</p>`;
+    case "list":    return `<div class="b">${b.label ? `<div class="b-list__lbl">${esc(b.label)}</div>` : ""}
+                       <ul class="b-list">${L(b.items, (x) => `<li>${esc(x)}</li>`)}</ul></div>`;
+    case "pairs":   return `<div class="b">${b.label ? `<div class="b-pairs__lbl">${esc(b.label)}</div>` : ""}
+                       <dl class="b-pairs">${L(b.items, (x) => `<div><dt>${esc(x.k)}</dt><dd>${esc(x.v)}</dd></div>`)}</dl></div>`;
+    case "tl":      return `<ol class="b b-tl">${L(b.items, (x) =>
+                       `<li><span class="d">${esc(x.d)}</span><span class="t">${esc(x.t)}</span></li>`)}</ol>`;
+    case "metrics": return `<ul class="b b-metrics">${L(b.items, (x) =>
+                       `<li><span class="v">${esc(x.v)}</span><span class="l">${esc(x.l)}</span></li>`)}</ul>`;
+    case "shots":   return `<div class="b">${b.label ? `<div class="b-shots__lbl">${esc(b.label)}</div>` : ""}
+                    <div class="b-shots${b.layout ? " b-shots--" + esc(b.layout) : ""} n${Math.min(b.items.length, 4)}">${L(b.items, (g) => `
+                       <figure>${g.tag ? `<span class="shot-tag">${esc(g.tag)}</span>` : ""}
+                       <a class="shot-link${g.crop ? " shot-link--crop shot-link--" + esc(g.crop) : ""}" href="${esc(g.src)}" target="_blank" rel="noopener" aria-label="${esc(g.caption)}, 원본 이미지 새 탭에서 보기"><img src="${esc(g.src)}" alt="${esc(g.caption)}" loading="lazy" decoding="async" onerror="hideShot(this)"></a>
+                       ${g.caption ? `<figcaption>${esc(g.caption)}${g.crop ? '<span class="shot-original">일부 화면 · 클릭하면 전체 보기</span>' : ""}</figcaption>` : ""}</figure>`)}</div></div>`;
+    case "note":    return `<p class="b b-note">${linkify(b.v)}</p>`;
+    case "todo":    return `<p class="b b-todo">${esc(b.v)}</p>`;
+    default:        return "";
+  }
+}
 
-  document.querySelectorAll(".viewctl__tab").forEach((btn) => {
+function renderCase(d) {
+  const c = d.cases[CASE];
+  if (!c) { el("main").innerHTML = `<div class="page"><div class="wrap"><p>케이스를 찾을 수 없습니다.</p></div></div>`; return; }
+  document.title = `${c.title} / 이서진`;
+
+  const ids = Object.keys(d.cases);
+  const i = ids.indexOf(CASE);
+  const prev = i > 0 ? ids[i - 1] : null;
+  const next = i < ids.length - 1 ? ids[i + 1] : null;
+
+  const heroList = Array.isArray(c.hero) ? c.hero : (c.hero && c.hero.src ? [c.hero] : []);
+  const hero = heroList.length ? `
+    <div class="cs__hero rv${heroList.length > 1 ? " cs__hero--multi" : ""}">
+      ${L(heroList, (g) => `<figure><img src="${esc(g.src)}" alt="" onerror="hideShot(this)">
+        ${g.caption ? `<figcaption class="cs__cap">${esc(g.caption)}</figcaption>` : ""}</figure>`)}
+    </div>` : "";
+
+  const shotsTop = has(c.shotsTop) ? `
+    <div class="cs__shotsTop rv">${L(c.shotsTop, (g) => `<img src="${esc(g.src)}" alt="" loading="lazy">`)}</div>` : "";
+
+  el("main").innerHTML = `
+    <div class="page"><div class="wrap">
+      <a class="back" href="work.html">← Work</a>
+      <div class="cs__eyebrow rv">${esc(c.no)}. ${esc(c.company)}</div>
+      <h1 class="cs__t rv">${esc(c.title)}</h1>
+      <div class="cs__pd rv">${esc(c.period)}${c.role ? ", " + esc(c.role) : ""}</div>
+      ${c.lead ? `<p class="cs__lead rv">${esc(c.lead)}</p>` : ""}
+
+      <div class="kpi rv">
+        ${L(c.metrics, (m) => `
+          <div><div class="kpi__v">${esc(m.v)}</div><div class="kpi__l">${esc(m.l)}</div>
+          ${m.s ? `<div class="kpi__s">${esc(m.s)}</div>` : ""}</div>`)}
+      </div>
+
+      ${c.shotsTop ? shotsTop : hero}
+
+      <div class="acc">
+        ${L(c.sections, (s, n) => `
+          <div class="acc__item rv${(OPEN_ALL) ? " open" : ""}">
+            <button class="acc__btn" id="section-${n}-button" aria-controls="section-${n}" aria-expanded="${OPEN_ALL}">
+              <span class="acc__no">${esc(s.no)}</span>
+              <span class="acc__t">${esc(s.t)}<span class="acc__s">${esc(s.sub)}</span></span>
+              <span class="acc__pm" aria-hidden="true"></span>
+            </button>
+            <div class="acc__panel" id="section-${n}" role="region" aria-labelledby="section-${n}-button" ${(OPEN_ALL) ? "" : "inert"}><div class="acc__inner"><div class="acc__body">
+              ${L(s.blocks, block)}
+            </div></div></div>
+          </div>`)}
+      </div>
+
+      <nav class="csnav">
+        <span>${prev ? `<a href="case-${prev}.html">← ${esc(d.cases[prev].title)}</a>` : ""}</span>
+        <span>${next ? `<a href="case-${next}.html">${esc(d.cases[next].title)} →</a>` : ""}</span>
+      </nav>
+    </div></div>`;
+
+  document.querySelectorAll(".acc__btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".viewctl__tab").forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      renderClusters(btn.dataset.view);
+      const item = btn.closest(".acc__item");
+      const open = item.classList.toggle("open");
+      btn.setAttribute("aria-expanded", String(open));
+      item.querySelector(".acc__panel").inert = !open;
     });
   });
-  renderClusters("capability");
 }
 
-function renderClusters(view) {
-  const c = DATA.careerSystem;
-  const v = c.views[view];
-  el("viewMode").textContent = v.mode;
-  el("viewNote").textContent = v.note;
+/* -------------------------------------------------------------- ABOUT */
+function renderAbout(d) {
+  const a = d.about, e = a.education;
+  el("main").innerHTML = `
+    <div class="page"><div class="wrap">
+      <h1 class="ab__t rv">${esc(a.title)}</h1>
+      <p class="ab__body rv">${L(a.body, (l) => esc(l) + "<br>")}</p>
+      <blockquote class="ab__creed rv">
+        <p>“${esc(a.creed.line)}”</p><p>${esc(a.creed.body)}</p>
+      </blockquote>
 
-  let clusters;
-  if (view === "capability") {
-    clusters = c.capabilities.map((g) => ({ no: g.no, title: g.title, desc: g.desc, projects: g.projects }));
-  } else {
-    // 회사별 그룹핑: 모든 프로젝트를 회사 기준으로 재정렬 (최신 회사 순)
-    const order = ["번개장터", "스타벅스 코리아", "SK플래닛 / 11번가", "티몬", "신세계 I&C", "SK커뮤니케이션즈"];
-    const byCo = {};
-    c.capabilities.forEach((g) => g.projects.forEach((p) => { (byCo[p.company] = byCo[p.company] || []).push(p); }));
-    clusters = order.filter((co) => byCo[co]).map((co, i) => ({
-      no: String(i + 1).padStart(2, "0"), title: co,
-      desc: byCo[co].length + "개 프로젝트", projects: byCo[co]
-    }));
-  }
-
-  el("career-clusters").innerHTML = clusters.map((g) => `
-    <div class="cluster">
-      <span class="cluster__dot"></span>
-      <div class="cluster__head">
-        <span class="cluster__no">${esc(g.no)}</span>
-        <div class="cluster__info"><h3>${esc(g.title)}</h3><p>${esc(g.desc)}</p></div>
-        <span class="cluster__count">${g.projects.length} PROJECTS</span>
+      <h2 class="h-sub rv" id="career">${esc(a.careerTitle)}</h2>
+      <div class="cr">
+        ${L(a.career, (r) => `
+          <div class="cr__row rv">
+            <div class="cr__pd">${esc(r.period)}</div>
+            <div class="cr__co">${esc(r.company)}${r.role ? `<span class="cr__rl">${esc(r.role)}</span>` : ""}</div>
+          </div>`)}
       </div>
-      <div class="rows">${g.projects.map(projectRow).join("")}</div>
-    </div>`).join("");
-  document.querySelectorAll(".prow__detail").forEach((b) =>
-    b.addEventListener("click", () => openCase(+b.dataset.case)));
-  wireReveal();
-}
 
-/* ---------------- SELECTED PROJECTS ---------------- */
-function renderProjects() {
-  const s = DATA.selectedProjects;
-  el("projects-head").innerHTML = `
-    <div class="section__label eyebrow">${esc(s.sectionNo)} / ${esc(s.sectionLabel)}</div>
-    <h2 class="section__title">${s.title.map((t) => `<span>${esc(t)}</span>`).join("")}</h2>
-    <p class="section__desc">${esc(s.desc)}</p>`;
-
-  el("cases").innerHTML = s.cases.map((cs, i) => `
-    <article class="case reveal">
-      <div class="case__no">${esc(cs.no)}</div>
-      <div class="case__cat">${esc(cs.no)} / ${esc(cs.category)}</div>
-      <div class="case__badge">${esc(cs.badge)}</div>
-      <div class="case__flow">${esc(cs.flow)}</div>
-      <h3 class="case__title">${esc(cs.title)}</h3>
-      <p class="case__desc">${esc(cs.desc)}</p>
-      <div class="case__meta">
-        <div><small>CONTEXT</small><b>${esc(cs.period)}</b></div>
-        <div class="res"><small>RESULT</small><b>${esc(cs.result)}</b></div>
-      </div>
-      <button class="case__open mono" data-case="${i}">OPEN CASE <span aria-hidden="true">↗</span></button>
-    </article>`).join("");
-
-  document.querySelectorAll(".case__open").forEach((b) =>
-    b.addEventListener("click", () => openCase(+b.dataset.case)));
-  wireReveal();
-}
-
-function openCase(i) {
-  const cs = DATA.selectedProjects.cases[i];
-  const d = cs.detail || {};
-  const secs = (d.sections || []).map((x) => `
-    <div class="modal__sec"><div class="modal__sec-no mono">${esc(x.no)}</div>
-      <div><h4>${esc(x.title)}</h4><p>${esc(x.body)}</p></div></div>`).join("");
-  const gallery = (d.gallery && d.gallery.length)
-    ? `<div class="modal__gallery">${d.gallery.map((g) =>
-        `<figure><img src="${esc(g.src)}" alt="${esc(g.caption || "")}">${g.caption ? `<figcaption>${esc(g.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : "";
-  const note = d.note ? `<p class="modal__note">${esc(d.note)}</p>` : "";
-
-  el("modal").innerHTML = `
-    <div class="modal__scrim" data-close></div>
-    <div class="modal__panel">
-      <button class="modal__close" data-close aria-label="닫기">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
-      </button>
-      <div class="modal__left">
-        <div class="modal__left-grid"></div>
-        <div class="modal__diamond">
-          <svg viewBox="0 0 420 300" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2">
-            <path d="M55 150 L330 58"/>
-            <path d="M55 150 L360 150"/>
-            <path d="M55 150 L330 242"/>
-            <rect x="333" y="123" width="54" height="54" transform="rotate(45 360 150)" fill="#E4513B" stroke="#fff" stroke-width="4"/>
-          </svg>
+      <h2 class="h-sub rv">${esc(a.eduTitle)}</h2>
+      <div class="cr">
+        <div class="cr__row rv">
+          <div class="cr__pd">${esc(e.period)}</div>
+          <div class="cr__co">${esc(e.school)}<span class="cr__rl">${esc(e.major)}</span></div>
         </div>
-        <div class="modal__cat">${esc(cs.no)} / ${esc(cs.category)}</div>
       </div>
-      <div class="modal__right">
-        <h3 class="modal__title">${esc(cs.title)}</h3>
-        <p class="modal__desc">${esc(cs.desc)}</p>
-        <div class="modal__facts">
-          <div class="modal__fact"><small>PERIOD</small><b>${esc(cs.period)}</b></div>
-          <div class="modal__fact"><small>ROLE</small><b>${esc(cs.role)}</b></div>
-          <div class="modal__fact"><small>OUTCOME</small><b>${esc(cs.result)}</b></div>
-        </div>
-        <div class="modal__sections">${secs}</div>
-        ${gallery}${note}
-      </div>
-    </div>`;
-  el("modal").classList.add("open");
-  document.body.style.overflow = "hidden";
-  el("modal").querySelectorAll("[data-close]").forEach((x) => x.addEventListener("click", closeCase));
-}
-function closeCase() {
-  el("modal").classList.remove("open");
-  el("modal").innerHTML = "";
-  document.body.style.overflow = "";
-}
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeCase(); });
-
-/* ---------------- AI LEADERSHIP ---------------- */
-function renderAI() {
-  const a = DATA.aiLeadership;
-  const wf = a.workflow.items.map((x) => `
-    <div class="flow3__item reveal"><div class="flow3__no mono">${esc(x.no)}</div>
-      <div class="flow3__label">${esc(x.label)}</div>
-      <div class="flow3__title">${esc(x.title)}</div>
-      <div class="flow3__desc">${esc(x.desc)}</div></div>`).join("");
-  const org = a.organization.items.map((x) => `
-    <div class="org__item reveal"><div class="org__no">${esc(x.no)} / ${esc(x.label)}</div>
-      <div class="org__title">${esc(x.title)}</div>
-      <div class="org__desc">${esc(x.desc)}</div></div>`).join("");
-  el("ai").innerHTML = `
-    <div class="wrap">
-      <div class="section__label eyebrow">${esc(a.sectionNo)} / ${esc(a.sectionLabel)}</div>
-      <div class="ai__top">
-        <h2 class="ai__headline">${a.headline.map((t) => `<span>${esc(t)}</span>`).join("")}</h2>
-        <div class="ai__meta"><small>${esc(a.meta.period)}</small><b>${esc(a.meta.role)}</b></div>
-        <p class="ai__intro">${esc(a.intro)}</p>
-      </div>
-      <div class="block-label">${esc(a.workflow.label)}</div>
-      <div class="ai__blocktitle">${a.workflow.title.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
-      <p class="ai__blockdesc">${esc(a.workflow.desc)}</p>
-      <div class="flow3">${wf}</div>
-      <div class="block-label">${esc(a.organization.label)}</div>
-      <div class="ai__blocktitle" style="margin-bottom:36px">${esc(a.organization.title)}</div>
-      <div class="org">${org}</div>
-    </div>`;
+    </div></div>`;
 }
 
-/* ---------------- TRAJECTORY ---------------- */
-function renderTrajectory() {
-  const t = DATA.trajectory;
-  const steps = t.steps.map((s) => `
-    <div class="traj__step reveal"><div class="traj__dot"></div>
-      <div class="traj__period mono">${esc(s.period)}</div>
-      <div class="traj__no">${esc(s.no)}</div>
-      <div class="traj__role">${esc(s.role)}</div>
-      <div class="traj__company">${esc(s.company)}</div>
-      <div class="traj__desc">${esc(s.desc)}</div></div>`).join("");
-  el("trajectory").innerHTML = `
-    <div class="wrap">
-      <div class="section__head">
-        <div class="section__label eyebrow">${esc(t.sectionNo)} / ${esc(t.sectionLabel)}</div>
-        <h2 class="section__title">${t.headline.map((x) => `<span>${esc(x)}</span>`).join("")}</h2>
-        <p class="section__desc">${esc(t.desc)}</p>
-      </div>
-      <div class="traj__axis"><span>${esc(t.axis.from)}</span><span>${esc(t.axis.to)}</span></div>
-      <div class="traj__track">${steps}</div>
-    </div>`;
+/* ------------------------------------------------------------- REVEAL */
+function reveal() {
+  const n = document.querySelectorAll(".rv");
+  if (!("IntersectionObserver" in window)) return n.forEach((x) => x.classList.add("in"));
+  const io = new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { rootMargin: "0px 0px -5% 0px", threshold: .02 });
+  n.forEach((x) => io.observe(x));
+  setTimeout(() => n.forEach((x) => x.classList.add("in")), 2200);
 }
 
-/* ---------------- CONTACT ---------------- */
-function renderContact() {
-  const c = DATA.contact;
-  const items = c.items.map((x) => `
-    <div class="contact__item"><small>${esc(x.label)}</small>
-      ${x.href ? `<a href="${esc(x.href)}">${esc(x.value)}</a>` : `<b>${esc(x.value)}</b>`}</div>`).join("");
-  el("contact").innerHTML = `
-    <div class="wrap contact">
-      <div class="contact__tagline">${esc(c.tagline)}</div>
-      <h2 class="contact__headline">${c.headline.map((t) => `<span>${esc(t)}</span>`).join("")}</h2>
-      <div class="contact__items">${items}</div>
-    </div>`;
-  el("footer").innerHTML = `<span>© ${esc(DATA.brand.name)} — Product Leader Portfolio</span><span>USER DATA → PRODUCT DECISION → BUSINESS IMPACT</span>`;
-}
-
-/* ---------------- INTERACTIONS ---------------- */
-function wireNavScroll() {
-  const nav = el("nav");
-  const onScroll = () => nav.classList.toggle("scrolled", window.scrollY > 40);
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-}
-function wireReveal() {
-  const check = () => {
-    const vh = window.innerHeight || document.documentElement.clientHeight;
-    document.querySelectorAll(".reveal:not(.in)").forEach((n) => {
-      const r = n.getBoundingClientRect();
-      if (r.top < vh * 0.92 && r.bottom > 0) n.classList.add("in");
-    });
-  };
-  if (!wireReveal._wired) {
-    window.addEventListener("scroll", check, { passive: true });
-    window.addEventListener("resize", check, { passive: true });
-    wireReveal._wired = true;
-  }
-  check();
-  // 안전장치: 혹시라도 계산이 어긋나면 잠시 뒤 전부 노출
-  setTimeout(() => document.querySelectorAll(".reveal:not(.in)").forEach((n) => {
-    const r = n.getBoundingClientRect();
-    if (r.top < (window.innerHeight || 0)) n.classList.add("in");
-  }), 400);
-}
-
-boot();
+/* ---------------------------------------------------------------- BOOT */
+fetch("content.json", { cache: "no-cache" })
+  .then((r) => { if (!r.ok) throw new Error("content.json " + r.status); return r.json(); })
+  .then((d) => {
+    chrome(d);
+    if (PAGE === "home") renderHome(d);
+    else if (PAGE === "work") renderWork(d);
+    else if (PAGE === "case") renderCase(d);
+    else if (PAGE === "about") renderAbout(d);
+    reveal();
+    if (location.hash) {
+      const t = document.querySelector(location.hash);
+      if (t) requestAnimationFrame(() => t.scrollIntoView({ behavior: "instant", block: "start" }));
+    }
+  })
+  .catch((err) => {
+    console.error(err);
+    el("main").innerHTML = `<div class="page"><div class="wrap"><p style="color:#DE4526">콘텐츠를 불러오지 못했습니다. content.json 의 JSON 문법을 확인해 주세요.<br><small>${esc(err.message)}</small></p></div></div>`;
+  });
