@@ -589,19 +589,17 @@
             },
             {
               "t": "shots",
-              "layout": "compare",
+              "layout": "pair",
               "items": [
                 {
                   "src": "assets/screens/c02-home-before.jpg",
                   "caption": "개편 전 홈의 단일 추천 피드",
-                  "tag": "BEFORE",
-                  "crop": "top"
+                  "tag": "BEFORE"
                 },
                 {
                   "src": "assets/screens/c02-home-after.jpg",
-                  "caption": "맥락에 따라 상품을 발견하는 개편 후 홈",
-                  "tag": "AFTER",
-                  "crop": "context"
+                  "caption": "개편 후 다양한 탐색 맥락의 복수 추천 컨테이너",
+                  "tag": "AFTER"
                 }
               ],
               "label": "홈 추천 구조 개편 (2023.02)"
