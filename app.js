@@ -70,6 +70,7 @@ function renderHome(d) {
     <section class="sec"><div class="wrap">
       <div class="sec__label rv">${esc(h.journey.label)}</div>
       <h2 class="sec__title rv">${L(h.journey.title, (t) => esc(t) + "<br>")}</h2>
+      <p class="page__d rv">${esc(h.journey.desc)}</p>
       <div class="jr">
         ${L(h.journey.items, (it) => `
           <div class="jr__row rv">
@@ -224,7 +225,7 @@ function renderAbout(d) {
         ${L(a.career, (r) => `
           <div class="cr__row rv">
             <div class="cr__pd">${esc(r.period)}</div>
-            <div class="cr__co">${esc(r.company)}${r.role ? `<span class="cr__rl">${esc(r.role)}</span>` : ""}</div>
+            <div class="cr__co">${esc(r.company)}${r.role ? `<span class="cr__rl">${esc(r.role)}</span>` : ""}${r.description ? `<span class="cr__rl">${esc(r.description)}</span>` : ""}</div>
           </div>`)}
       </div>
 
