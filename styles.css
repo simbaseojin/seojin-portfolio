@@ -298,3 +298,7 @@ body[data-page="case"] .back{margin-bottom:20px}
 .shot-original{display:block;margin-top:4px;color:var(--ink-50);font-size:10px}
 .wk__thumb--prostore img{object-position:center 30%}
 .wk__thumb--discovery img:first-child{object-fit:cover;object-position:center top}
+
+/* Career responsibilities */
+.cr__tasks{margin:10px 0 0;padding-left:1.2em;font-size:var(--t-sm);font-weight:400;color:var(--ink-50);line-height:1.7;overflow-wrap:anywhere}
+.cr__tasks li+li{margin-top:3px}
