@@ -225,7 +225,7 @@ function renderAbout(d) {
         ${L(a.career, (r) => `
           <div class="cr__row rv">
             <div class="cr__pd">${esc(r.period)}</div>
-            <div class="cr__co">${esc(r.company)}${r.role ? `<span class="cr__rl">${esc(r.role)}</span>` : ""}${has(r.tasks) ? `<ul class="cr__tasks">${L(r.tasks, (task) => `<li>${esc(task)}</li>`)}</ul>` : ""}</div>
+            <div class="cr__co">${esc(r.company)}${r.role ? `<span class="cr__rl">${esc(r.role)}</span>` : ""}${r.description ? `<p class="cr__desc">${esc(r.description)}</p>` : ""}</div>
           </div>`)}
       </div>
 

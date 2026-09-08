@@ -300,5 +300,4 @@ body[data-page="case"] .back{margin-bottom:20px}
 .wk__thumb--discovery img:first-child{object-fit:cover;object-position:center top}
 
 /* Career responsibilities */
-.cr__tasks{margin:10px 0 0;padding-left:1.2em;font-size:var(--t-sm);font-weight:400;color:var(--ink-50);line-height:1.7;overflow-wrap:anywhere}
-.cr__tasks li+li{margin-top:3px}
+.cr__desc{margin:8px 0 0;font-size:var(--t-sm);font-weight:400;color:var(--ink-50);line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
